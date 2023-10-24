@@ -10,7 +10,7 @@ class Car(MODI):
         self.MOTOR_REAR = self.motors[1]
 
     # Go straight
-    def straight(self, t: float = 1):
+    def __straight(self, t: float = 1):
         self.MOTOR_FRONT.speed = -100, 100
         self.MOTOR_REAR.speed = 100, -100
         sleep(t)
@@ -18,7 +18,7 @@ class Car(MODI):
         self.MOTOR_REAR.speed = 0, 0
 
     # Turn right
-    def right(self, t: float = 0.7):
+    def __right(self, t: float = 0.7):
         self.MOTOR_FRONT.speed = 100, 100
         self.MOTOR_REAR.speed = -100, -100
         sleep(t)
@@ -26,7 +26,7 @@ class Car(MODI):
         self.MOTOR_REAR.speed = 0, 0
 
     # Turn left
-    def left(self, t: float = 0.7):
+    def __left(self, t: float = 0.7):
         self.MOTOR_FRONT.speed = -100, -100
         self.MOTOR_REAR.speed = 100, 100
         sleep(t)
@@ -35,14 +35,15 @@ class Car(MODI):
 
     # Executer
     # Expected: ['go', 'go', 'go', 'go', 'go', 'turn right', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go']
-    def execute(instruction: str):
+    def execute(self, instruction: str):
         if instruction == 'turn right':
-            __right()
+            self.__right()
         if instruction == 'turn left':
-            __left()
-        __straight()
+            self.__left()
+        self.__straight()
 
 
+"""
 car = MODI(conn_type="ble", network_uuid='311228c')
 car = MODI()
 MOTOR_FRONT = car.motors[0]
@@ -84,3 +85,4 @@ def execute(instruction: str):
     if instruction == 'turn left':
         __left()
     __straight()
+"""
