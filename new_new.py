@@ -25,12 +25,12 @@ if __name__ == "__main__":
     RIGHT_IR = car.irs[RIGHT_IR_IDX]
     MOTER = car.motors[0]
 
-    pid_con = pid.PID(dt=DELTA_TIME, Kp=0.1, Kd=0.015, Ki=0)
+    pid_con = pid.PID(dt=DELTA_TIME, Kp=0.1, Kd=0.015, Ki=0.01)
     MOTER.speed = 0, 0
 
     while True:
         error = (LEFT_IR.proximity - RIGHT_IR.proximity)
-        output = mapper(pid_con.adjust(error=error))
+        output = mapper(error)
         sleep(DELTA_TIME)
         # front
         RIGHT_MOTER_SPEED = BASE_SPEED + output * SPEED_LIMIT

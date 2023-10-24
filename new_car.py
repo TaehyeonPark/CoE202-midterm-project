@@ -16,7 +16,7 @@ LEFT_DEFAULT_SPEED = 80
 RIGHT_DEFAULT_SPEED = 100
 
 OUTPUT_SPEED_THRESHOLD = 40
-DELTA_TIME = 0.001
+DELTA_TIME = 0.01
 SPEED_LIMIT = 30
 
 if __name__ == "__main__":
@@ -25,19 +25,15 @@ if __name__ == "__main__":
     RIGHT_IR = car.irs[RIGHT_IR_IDX]
     MOTER = car.motors[0]
 
-    pid_con = pid.PID(dt=DELTA_TIME, Kp=0.1, Kd=0.015, Ki=0)
     MOTER.speed = 0, 0
 
     while True:
-        error = (LEFT_IR.proximity - RIGHT_IR.proximity)
-        output = mapper(pid_con.adjust(error=error))
+        RIGHT_MOTER_SPEED = mapper(
+            ((abs((RIGHT_IR.proximity) * ((RIGHT_IR.proximity))) + 0.01)/(abs((LEFT_IR.proximity) * ((LEFT_IR.proximity))) + 0.01))) * 40 + 20
+        # LEFT_MOTER_SPEED = mapper(
+        #     (LEFT_IR.proximity)) * 100
+
+        LEFT_MOTER_SPEED = mapper(
+            ((abs((LEFT_IR.proximity) * ((LEFT_IR.proximity))) + 0.01)/(abs((RIGHT_IR.proximity) * ((RIGHT_IR.proximity))) + 0.01))) * 40 + 20
         sleep(DELTA_TIME)
-        # front
-        RIGHT_MOTER_SPEED = BASE_SPEED + output * SPEED_LIMIT
-        LEFT_MOTER_SPEED = (BASE_SPEED - output * SPEED_LIMIT)
-
-        print(
-            f"[LOGGER {time()}]\t OUPUT : {output}| \tLEFT : {LEFT_MOTER_SPEED}\tRIGHT : {RIGHT_MOTER_SPEED}", end='\r')
-
-        # RIGHT(+), LEFT(-)
         MOTER.speed = (LEFT_MOTER_SPEED * 0.9), -RIGHT_MOTER_SPEED
