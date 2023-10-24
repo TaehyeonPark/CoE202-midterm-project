@@ -1,7 +1,2 @@
-Include
-Lib
-pymodi
-Scripts
 __pycache__
 MODI Firmware Updater.exe
-pyvenv.cfg
