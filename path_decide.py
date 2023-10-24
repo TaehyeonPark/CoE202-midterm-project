@@ -63,5 +63,6 @@ arrString = """[["right", "right", "right", "right", "right", "down", "down", "d
  ['up', 'left', 'left', 'left', 'left', 'left', 'left', 'left']]""".replace("'", '"')
 
 decide = PathDecide(arrString)
-instruction = decide.getInstructions('right')
+instruction = decide.getInstructions('right') # 첫 방향 설정 필요
 print(instruction)
+# Expected: ['go', 'go', 'go', 'go', 'go', 'turn right', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go']
