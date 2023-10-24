@@ -1,7 +1,6 @@
 from pymodi.modi import *
 from time import *
 import PID_controller as pid
-from utils import *
 
 RIGHT_THRESHOLD = 50
 LEFT_THRESHOLD = 50
