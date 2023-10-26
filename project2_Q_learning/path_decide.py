@@ -50,8 +50,25 @@ class PathDecide:
       result = result + turning + ['go']
       currentDirection = action
       self.currentPosition.action(action)
+    return self._merge_and_count(result)
+  
+  def _merge_and_count(self, input_list):
+    result = []
+    current_element = input_list[0]
+    count = 1
+
+    for i in range(1, len(input_list)):
+        if input_list[i] == current_element:
+            count += 1
+        else:
+            result.append((current_element, count))
+            current_element = input_list[i]
+            count = 1
+
+    result.append((current_element, count))
+
     return result
-    
+
 
 arrString = """[["right", "right", "right", "right", "right", "down", "down", "down"],
  ["right", "right", "right", "right", "down", "right", "down", "down"],
@@ -66,3 +83,4 @@ decide = PathDecide(arrString)
 instruction = decide.getInstructions('right') # 첫 방향 설정 필요
 print(instruction)
 # Expected: ['go', 'go', 'go', 'go', 'go', 'turn right', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go']
+# Expected: [('go', 5), ('turn right', 1), ('go', 1), ('turn left', 1), ('go', 1), ('turn right', 1), ('go', 3), ('turn left', 1), ('go', 1), ('turn right', 1), ('go', 3)]
