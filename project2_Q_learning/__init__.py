@@ -12,8 +12,15 @@ class Car(MODI):
     # Go straight
     def __straight(self, t: float = 1.78, multiplier: int = 1):
         speed = 50
-        self.MOTOR_FRONT.speed = -int(speed*(90/100)), speed
-        self.MOTOR_REAR.speed = speed, -int(speed*(90/100))
+
+        '''
+        # error correction
+        # self.MOTOR_FRONT.speed = -int(speed*(50/100)), speed
+        # sleep(0.01)
+        '''
+        self.MOTOR_FRONT.speed = -int(speed*(87/100)), speed
+
+        self.MOTOR_REAR.speed = speed, -int(speed*(87/100))
         sleep(t*multiplier)
         self.MOTOR_FRONT.speed = 0, 0
         self.MOTOR_REAR.speed = 0, 0
@@ -41,10 +48,10 @@ class Car(MODI):
     # Executer
     # Expected: ['go', 'go', 'go', 'go', 'go', 'turn right', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go', 'turn left', 'go', 'turn right', 'go', 'go', 'go']
 
-    def execute(self, instruction: str):
+    def execute(self, instruction: str, multiplier: int = 1):
         if instruction.lower() == 'turn right':
             self.__right()
         if instruction.lower() == 'turn left':
             self.__left()
         if instruction.lower() == 'go':
-            self.__straight()
+            self.__straight(multiplier=multiplier)
