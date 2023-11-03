@@ -2,16 +2,16 @@ from pymodi.modi import *
 from time import *
 
 IR_THRESHOLD = 20
-IR_THRESHOLD_LEFT = 40
-IR_THRESHOLD_RIGHT = 40
+IR_THRESHOLD_LEFT = 50
+IR_THRESHOLD_RIGHT = 50
 
 
 class Car(MODI):
     def __init__(self, modi_version: int = 1, conn_type: str = "", verbose: bool = False, port=None, network_uuid: str = "", virtual_modules=None):
         super().__init__(modi_version, conn_type, verbose,
                          port, network_uuid, virtual_modules)
-        self.IR_LEFT = self.irs[0]
-        self.IR_RIGHT = self.irs[1]
+        self.IR_LEFT = self.irs[1]
+        self.IR_RIGHT = self.irs[0]
         self.MOTOR_FRONT = self.motors[0]
         self.MOTOR_REAR = self.motors[1]
 
@@ -65,7 +65,7 @@ class Car(MODI):
 
     def after_cross(self, t):
         print("called def after_cross(self):")
-        speed = 50
+        speed = 35
         speed_front_left, speed_front_right = int(speed*(87/100)), -speed
         speed_rear_left, speed_rear_right = speed, -int(speed*(87/100))
 
@@ -79,15 +79,25 @@ class Car(MODI):
         print("out")
 
     # Go straight
-    def __straight(self, t: float = .7, multiplier: int = 1):
+    def __straight(self, t: float = 1.3, multiplier: int = 1):
         for i in range(multiplier):
             self.until_cross()
             self.after_cross(t)
 
     # Turn right
-    def __right(self, t: float = .89, multiplier: int = 1):
-        speed = 80
-        # self.after_cross(.15)
+    def __right(self, t: float = 2.6, multiplier: int = 1):
+        speed = -45
+        speed_front_left, speed_front_right = int(speed*(87/100)), -speed
+        speed_rear_left, speed_rear_right = speed, -int(speed*(87/100))
+
+        self.MOTOR_FRONT.speed = speed_front_left, speed_front_right
+        self.MOTOR_REAR.speed = speed_rear_left, speed_rear_right
+
+        sleep(0.06)
+
+        self.MOTOR_FRONT.speed = 0, 0
+        self.MOTOR_REAR.speed = 0, 0
+        speed = 40
 
         self.MOTOR_FRONT.speed = -int(speed*(90/100)), -speed
         self.MOTOR_REAR.speed = -speed, -int(speed*(90/100))
@@ -96,8 +106,8 @@ class Car(MODI):
         self.MOTOR_REAR.speed = 0, 0
 
     # Turn left
-    def __left(self, t: float = .7, multiplier: int = 1):
-        speed = 80
+    def __left(self, t: float = 2.35, multiplier: int = 1):
+        speed = 40
         self.MOTOR_FRONT.speed = speed, speed
         self.MOTOR_REAR.speed = speed, speed
         sleep(t*multiplier)
